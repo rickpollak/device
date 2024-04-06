@@ -1,0 +1,13 @@
+{ 
+  "tracks": 
+  [
+    {
+      "name": "Autobahn Country Club Full",
+      "finishLine": { "latitude": 41.456556, "longitude": -88.125889 }
+    },
+    {
+      "name": "Glen Ellyn International Speedway",
+      "finishLine": { "latitude": 41.867924, "longitude": -88.069093 }
+    }
+  ]
+}
