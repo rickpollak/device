@@ -1,5 +1,5 @@
-const { deflate, inflateSync, deflateSync } = require('zlib')
-const fs = require('fs')
+const { deflate, inflateSync, deflateSync } = require("zlib");
+const fs = require("fs");
 
 class Compress {
   constructor() {}
@@ -8,32 +8,32 @@ class Compress {
     let payloadString = JSON.stringify(payload);
 
     deflate(payloadString, (err, buffer) => {
-      if (err) { console.log(err) }
-      else {
-        let compressedPayload = buffer.toString('base64')
-        fs.writeFileSync(fileName, compressedPayload, 'utf-8')
+      if (err) {
+        console.log(err);
+      } else {
+        let compressedPayload = buffer.toString("base64");
+        fs.writeFileSync(fileName, compressedPayload, "utf-8");
       }
-    })
-  }
+    });
+  };
 
   saveToDisk2 = (fileName, payload) => {
     let payloadString = JSON.stringify(payload);
-    const compressedPayload = deflateSync(payloadString)
-    const compressedBase = compressedPayload.toString('base64')
+    const compressedPayload = deflateSync(payloadString);
+    const compressedBase = compressedPayload.toString("base64");
 
-    fs.writeFileSync(fileName, compressedBase, 'utf-8')
+    fs.writeFileSync(fileName, compressedBase, "utf-8");
 
-    return compressedBase
-  }
+    return compressedBase;
+  };
 
   decompress = (payload) => {
-    const buffer = Buffer.from(payload, 'base64');
-    const uncompressedPayload = inflateSync(buffer).toString()
-    const scoreboardJson = JSON.parse(uncompressedPayload)
+    const buffer = Buffer.from(payload, "base64");
+    const uncompressedPayload = inflateSync(buffer).toString();
+    const scoreboardJson = JSON.parse(uncompressedPayload);
 
-    return scoreboardJson
-  }
-
+    return scoreboardJson;
+  };
 }
 
-module.exports = Compress
+module.exports = Compress;

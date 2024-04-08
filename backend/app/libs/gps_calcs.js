@@ -1,4 +1,4 @@
-const detectLap= (gpsCoords) => {
+const detectLap = (gpsCoords) => {
   return true;
 };
 

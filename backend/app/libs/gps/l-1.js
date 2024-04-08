@@ -1,46 +1,47 @@
-const async = require('async')
-const geolib = require('geolib')
-const fs = require('fs')
-const tracksJson = require(`${process.env.HOMEPATH}/.bin/cloud-data/racetracks.json`);
+const async = require("async");
+const geolib = require("geolib");
+const fs = require("fs");
+const tracksJson = require(
+  `${process.env.HOMEPATH}/.bin/cloud-data/racetracks.json`,
+);
 
 class Laptimer {
-  #finishLineCords
+  #finishLineCords;
 
   constructor(finishLine) {
-    this.#finishLineCords = finishLine
+    this.#finishLineCords = finishLine;
   }
 
-	// currentCords - vehicle current Cords, finishLineCords pre-supplied
+  // currentCords - vehicle current Cords, finishLineCords pre-supplied
   didCrossLine = (currentCords, finishLineCords) => {
-    return (geolib.isPointWithinRadius(currentCords, finishLineCords, 20))
-  }
+    return geolib.isPointWithinRadius(currentCords, finishLineCords, 20);
+  };
 
   didCrossLineV2 = (currentCords, finishLineCords) => {
     //console.log(currentCords)
     //console.log(finishLineCords)
     //console.log(geolib.isPointInPolygon(currentCords, finishLineCords))
-    return (geolib.isPointInPolygon(currentCords, finishLineCords))
-  }
+    return geolib.isPointInPolygon(currentCords, finishLineCords);
+  };
 
-  getDistance = () => {
-  }
+  getDistance = () => {};
 
   getTrack = (currentCords) => {
-    let numberOfConfigurations = 0
-    let iteratedNumber = 0
+    let numberOfConfigurations = 0;
+    let iteratedNumber = 0;
 
-    let configurableTracksAtMyLocation = []
+    let configurableTracksAtMyLocation = [];
 
-
-    for (const item of tracksJson){
+    for (const item of tracksJson) {
       // what if user did not activate the custom track. It should default to something, make sure you account for that
-      if (item.configurable) { //special for tracks with different configs, i.e Autobahn CC, Mid-Ohio
+      if (item.configurable) {
+        //special for tracks with different configs, i.e Autobahn CC, Mid-Ohio
         if (geolib.isPointWithinRadius(currentCords, item.finishLine, 6000)) {
-          configurableTracksAtMyLocation.push(item)
+          configurableTracksAtMyLocation.push(item);
         }
       } else {
         if (geolib.isPointWithinRadius(currentCords, item.finishLine, 6000)) {
-          return item
+          return item;
         }
       }
     }
@@ -48,7 +49,7 @@ class Laptimer {
     for (const item of configurableTracksAtMyLocation) {
       if (item.userActivated) {
         if (geolib.isPointWithinRadius(currentCords, item.finishLine, 6000)) {
-          return item
+          return item;
         }
       }
     }
@@ -56,11 +57,11 @@ class Laptimer {
     for (const item of configurableTracksAtMyLocation) {
       if (item.defaultTrack) {
         if (geolib.isPointWithinRadius(currentCords, item.finishLine, 6000)) {
-          return item
+          return item;
         }
       }
     }
-  }
+  };
 }
 
-module.exports = Laptimer
+module.exports = Laptimer;

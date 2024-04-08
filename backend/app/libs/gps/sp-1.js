@@ -1,13 +1,12 @@
-const EventEmitter = require('events')
-const SerialPort = require('serialport')
-const GPS = require('gps')
-const sleep = require('sleep')
-const Readline = require('@serialport/parser-readline')
+const EventEmitter = require("events");
+const SerialPort = require("serialport");
+const GPS = require("gps");
+const sleep = require("sleep");
+const Readline = require("@serialport/parser-readline");
 //const port = new SerialPort('/dev/ttyS0', { baudRate: 115200 })
-const port = new SerialPort('/dev/serial0', { baudRate: 230400 })
+const port = new SerialPort("/dev/serial0", { baudRate: 230400 });
 
-const parser = new Readline()
-
+const parser = new Readline();
 
 class Gps {
   #t;
@@ -15,7 +14,7 @@ class Gps {
   #shutdown;
 
   constructor() {
-    this.t = new EventEmitter.EventEmitter()
+    this.t = new EventEmitter.EventEmitter();
   }
 
   #enableGps = () => {
@@ -34,71 +33,72 @@ class Gps {
         port.write('AT+CGNSCMD=0, "$PMTK220,1000*1F\n"');
       }
     }) */
-  }
+  };
 
   decreaseHZ = () => {
     // "\xB5\x62\x06\x08\x06\x00\xF4\x01\x01\x00\x01\x00\x0B\x77" - 2HZ
-    console.log("[GPS] - decreasing frequency to 1 second.")
-	  //port.write('AT+CGNSCMD=0, "$PMTK220,1000*1F\n"'); //backdown gps to 1 second
+    console.log("[GPS] - decreasing frequency to 1 second.");
+    //port.write('AT+CGNSCMD=0, "$PMTK220,1000*1F\n"'); //backdown gps to 1 second
     //port.write('\xB5\x62\x06\x08\x06\x00\xF4\x01\x01\x00\x01\x00\x0B\x77')
-  }
+  };
 
   increaseHZ = () => {
     // "\xB5\x62\x06\x08\x06\x00\x64\x00\x01\x00\x01\x00\x7A\x12" - 10HZ
-    console.log("[GPS] - increasing frequency to 100ms.")
+    console.log("[GPS] - increasing frequency to 100ms.");
     //port.write('AT+CGNSCMD=0,"$PMTK220,100*2F\n"', function (err){ console.log(err)}) // increase gps sensitivty to 100ms prompts
     //port.write('\xB5\x62\x06\x08\x06\x00\x64\x00\x01\x00\x01\x00\x7A\x12')
-  }
+  };
 
   stop = () => {
-	  //port.write('AT+CGNSCMD=0, "$PMTK220,1000*1F\n"'); //backdown gps to 1 second
+    //port.write('AT+CGNSCMD=0, "$PMTK220,1000*1F\n"'); //backdown gps to 1 second
     //port.write('AT+CGNSPWR=0\n')
     //port.write("\xB5\x62\x06\x08\x06\x00\xF4\x01\x01\x00\x01\x00\x0B\x77")
-  }
+  };
 
   start = (devicePath) => {
-    this.#enableGps()
+    this.#enableGps();
 
-    parser.on('data', line => {
+    parser.on("data", (line) => {
       try {
-        let input_data = GPS.Parse(line)
+        let input_data = GPS.Parse(line);
 
-        let gps_time = input_data.time
-        let gps_lat = input_data.lat
-        let gps_lon = input_data.lon
-        let gps_speed = input_data.speed
-        let gps_track = input_data.track
+        let gps_time = input_data.time;
+        let gps_lat = input_data.lat;
+        let gps_lon = input_data.lon;
+        let gps_speed = input_data.speed;
+        let gps_track = input_data.track;
 
-        if (input_data.type == 'RMC' && gps_lat !== null && gps_lon !== null) {
+        if (input_data.type == "RMC" && gps_lat !== null && gps_lon !== null) {
           this.data = {
             time: gps_time,
             lat: gps_lat,
             lon: gps_lon,
             speed: gps_speed,
-            track: gps_track
-          }
-          this.t.emit('event', this.data)
-        }
-        else {
+            track: gps_track,
+          };
+          this.t.emit("event", this.data);
+        } else {
           if (line.match(/NORMAL POWER DOWN/)) this.shutdown = true; // button on the GPS module acts as a rasbperry pi shutdown button
         }
-    } catch (err) {
-      console.log("[GPS EXCEPTION DETECTED]")
-      console.log(err)
-    }
+      } catch (err) {
+        console.log("[GPS EXCEPTION DETECTED]");
+        console.log(err);
+      }
     });
-	  parser.on('', line => { console.log(line) });
-	  port.pipe(parser)
-  }
+    parser.on("", (line) => {
+      console.log(line);
+    });
+    port.pipe(parser);
+  };
 
   getReadings = () => {
-	  //return data
-    return this.t
-  }
+    //return data
+    return this.t;
+  };
 
   getPowerStatus = () => {
-	  return this.shutdown
-  }
+    return this.shutdown;
+  };
 }
 
-module.exports = Gps
+module.exports = Gps;
