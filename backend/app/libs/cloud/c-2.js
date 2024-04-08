@@ -77,7 +77,7 @@ class Cloud {
     })
   }
 
-  /* UPLOAD LAPs telemtry to cloud.
+  /* UPLOAD LAPs telemetry to cloud.
    * Maximum size per lap .dat file cannot be more than 128K.
    *
    * TODO:
@@ -102,7 +102,6 @@ class Cloud {
 				else {
 					try {
 					console.log(`[CLOUD] - live lap uploaded to cloud successfully!`)
-					//fs.writeFileSync(`${summaryFilePath}`, JSON.stringify(summaryDBFile))
 					} catch(e) { console.log(e)}
 				}
 			}) } catch(e1) { console.log(e1) }
@@ -149,7 +148,6 @@ class Cloud {
 
                     let lapDuration = lapInfo.laptimeInMs
 
-                    //console.log(lapInfo + " " + lapFilePath + " " + lapS3)
                     console.log(lapFilePath + " " + lapS3 )
 
                     // don't upload laptimes longer than 5 minutes, one day if we get to nurburgring this will need to be FIXED!!!
@@ -241,8 +239,7 @@ class Cloud {
                   console.log("Done")
                   iot.publish('trackdata-gluetogether', JSON.stringify(uniqueSessionsProcessed), { qos: 1 }, function(err) {
                     // send session summary
-                    //console.log(uniqueSessionsProcessed)
-                    //console.log("sending session summary")
+
                     uniqueSessionsProcessed.forEach(function (session){
                       try {
 				                fs.readFile(`${dataDirectory}/summary-${session.session_id}.dat`, (err, sumData) => {
@@ -314,8 +311,6 @@ class Cloud {
   }
 
   startUploadTimer = (dataDir, threshold) => {
-    //this.#uploadTimer = setInterval(() => this.uploadAllSessionTelemetry("telemetry-lapdata", dataDir), threshold)
-    //this.#uploadTimer = this.uploadAllSessionTelemetry("telemetry-lapdata", dataDir)
   }
 
   stopUploadTimer = () => {

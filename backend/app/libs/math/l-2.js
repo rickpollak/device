@@ -76,9 +76,7 @@ class LaptimeMath {
   }
 
 	sortLaptimesByTime = (laptimes) => {
-    //console.log(laptimes)
 		let laptimesInMs = this.#convertLaptimeToMs(laptimes)
-		//let sortedLaptimes =  laptimes.sort(this.#sortByProperty('laptimeInMs'))
     let sortedLaptimes = laptimes.sort((a, b) => a.laptimeInMs - b.laptimeInMs)
 
     return sortedLaptimes

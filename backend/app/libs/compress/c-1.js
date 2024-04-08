@@ -11,7 +11,6 @@ class Compress {
       if (err) { console.log(err) }
       else {
         let compressedPayload = buffer.toString('base64')
-        //console.log(compressedPayload.length)
         fs.writeFileSync(fileName, compressedPayload, 'utf-8')
       }
     })

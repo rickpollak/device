@@ -72,14 +72,11 @@ stopWatch.getTime().on('event', (time) => {
   gps_stopwatch = time.time
   gps_stopwatchHumanReadable = time.timeHuman
 
-  //console.log(gps_stopwatchHumanReadable)
-
   socket.publish(gps_stopwatchHumanReadable, "stopwatch")
 })
 
 obd.getReadings().on('event', (obd_data) => {
   obdCurrentReading = obd_data
-  //console.log(obdCurrentReading)
 })
 
 gyro.getReadings().on('event', (gForce) => {
@@ -90,7 +87,7 @@ function cacheToDisk(d_log, s_id) {
 	return new Promise((resolve, reject) => {
 		let time = new Date().getTime()
     let fileName = `${directoryRamFSPath}/${s_id}-${time}.dat`
-    //let d = JSON.stringify(d_log)
+
 
 		fs.open(fileName, 'wx', (err, fd) => {
 			if (err) {
@@ -152,21 +149,8 @@ function saveLapToDisk(l_id, l_number, l_time, s_id, ignore) {
 }
 
 function save(d_log, s_id) {
-  //cacheToDisk(d_log)
   compress.compressPayload(d_log).then((compressedPayload) => {
     cacheToDisk(compressedPayload, s_id)
-		//then((fileName) => {
-      /*
-      iotCoreDevice.publish('parent_topic_1', JSON.stringify(compressedPayload), { qos: 1 }, function(err) {
-        if (err) reject()
-        else {
-          fs.unlinkSync(fileName);
-        }
-      })
-      */
-      //}).catch((e) => {
-        //console.log(e)
-    //});
   });
 }
 
@@ -174,7 +158,6 @@ const main = () => {
   console.log("[MAIN] running")
 
   obdCurrentReading = { rpm: 0, speed: 0, temp: 0, gear: 0, throttlePos: 0 }
-  //let gpsCurrentReading = gps.getReadings()
   gps_drawing_counter = 0 // limit socket.pushes for GPS cords for driving lines.
 	gps_drawing_need_to_draw = true // if we continue to draw on UI, everything becomes super slow. Only draw until crossing the line to get a full map of the racetrack
 
@@ -186,9 +169,6 @@ const main = () => {
   gps_tickCounter = 0
   cloud_tickPushCounter = 0
 
-
-  //gps_finishLine = { latitude: 41.867924, longitude: -88.069093 }
-  // GOOD gps_finishLine = { latitude: 0, longitude: -0 }
   gps_finishLine = [{ latitude: 0, longitude: -0 }, { latitude: 0, longitude: -0 }, { latitude: 0, longitude: -0 }, { latitude: 0, longitude: -0 }] //polygon, more precise
   gps_racetrackId = 0
 
@@ -219,15 +199,6 @@ const main = () => {
 
     let geoLibCords = {latitude: gps_lat, longitude: gps_lon }
 
-
-    /*
-     * Section for displaying telemetry on the frontend
-     *
-     *
-     *
-     *
-    */
-
     if (config.obd_display) {
       socket.publish({type: "obd", payload: {
           rpm: obd_rpm,
@@ -236,27 +207,6 @@ const main = () => {
       }}, "obd")
     }
 
-    //console.log(geoLibCords)
-
-    /*
-    let payload = {
-      gps_time_stopwatch: gps_time_stopwatch,
-      gps_time: gps_time,
-      gps_lat: gps_lat,
-      gps_lon: gps_lon,
-      gps_speed: gps_speed,
-      gps_track: gps_track,
-      gps_laptime: null,
-      gps_lapnumber: gps_lapNumber,
-      obd: {
-        rpm: obd_rpm, // will come from obd reading, hardcoded for now
-        speed: obd_speed,
-        temp: obd_temp,
-        gear: obd_gear,
-        throttlePos: obd_throttlePos
-      }
-    }
-    */
     let payload = {
       ts: gps_time_stopwatch,
       t: gps_time,
@@ -326,28 +276,16 @@ const main = () => {
       }
     }
 
-    //console.log("Drawing Counter: " + gps_drawing_counter + " Tick Counter: " + gps_tickCounter + " Telemetry Counter: " + cloud_tickPushCounter)
-
-
-    // TODO you need to insert something to check if the laptime is above some unrealistic value so you can terminate the session etc.
-
-    //console.log(`${gps_stopwatch} - ${config.live_telemetry_cutoff} - ${cloud_tickPushCounter}`)
-
     if (cloud_tickPushCounter == config.live_telemetry_interval && sessionPending) {
-      //console.log("publishing: " + cloud_tickPushCounter)
-
       // for sending live telemetry, this should be configurable through config file/cloud settigns
       if (gps_stopwatch < config.live_telemetry_cutoff){
-	//cloud.publishAndForget("LiveTelemetry", `{"i":"${MY_ID}","s":${obd_speed.toFixed(1)},"l":${gps_lat.toFixed(8)},"o":${gps_lon.toFixed(8)},"t":${gps_time.getTime()}}`)
-  //console.log(gyro_g)
-	bufferLive.writeDoubleBE(gps_lat.toFixed(8), 0)
-	bufferLive.writeDoubleBE(gps_lon.toFixed(8), 8)
- 	bufferLive.writeFloatBE(obd_speed.toFixed(1), 16)
- 	bufferLive.writeFloatBE(gyro_g.g, 20)
- 	bufferLive.writeBigInt64BE(BigInt(gps_time.getTime()), 24)
-	bufferTrackerIDHex.copy(bufferLive, 32)
-	//cloud.publishAndForget("LiveTelemetry", `{"i":"${MY_ID}","s":${obd_speed.toFixed(1)},"l":${gps_lat.toFixed(8)},"o":${gps_lon.toFixed(8)},"t":${gps_time.getTime()}}`)
-	cloud.publishAndForgetBlob("LiveTelemetry", bufferLive)
+	      bufferLive.writeDoubleBE(gps_lat.toFixed(8), 0)
+	      bufferLive.writeDoubleBE(gps_lon.toFixed(8), 8)
+        bufferLive.writeFloatBE(obd_speed.toFixed(1), 16)
+ 	      bufferLive.writeFloatBE(gyro_g.g, 20)
+ 	      bufferLive.writeBigInt64BE(BigInt(gps_time.getTime()), 24)
+	      bufferTrackerIDHex.copy(bufferLive, 32)
+	      cloud.publishAndForgetBlob("LiveTelemetry", bufferLive)
       }
 
       cloud_tickPushCounter = 0
@@ -358,9 +296,6 @@ const main = () => {
       gps_tickCounter = 0
     }
 
-    //process.stdout.write(`=> Car (${obd_speed}/${gps_speed} KMH at ${obd_rpm} RPM, TPOS: ${obd_throttlePos}, TIME: ${gps_stopwatch}, ID: ${sessionId}, F:${gps_finishLine.latitude} ${gps_finishLine.longitude}\r`)
-    //process.stdout.write(`=> TIME: ${gps_stopwatch}, ID: ${sessionId} \r`)
-
     if (obd_speed < config.recording_speed_threshold * 1.609) {
       vehicleAtRestCounter++
     } else {
@@ -369,13 +304,10 @@ const main = () => {
 
 
     // ** SESSION ENDS
-    if (vehicleAtRestCounter > 100 && sessionPending && sessionId) { // 100 = in this case gps sensitivity is set up to prompt every 100 ms therefore after 10 seconds at rest end the session
+    if (vehicleAtRestCounter > 100 && sessionPending && sessionId) { // 100 = in this case gps sensitivity is set up to prompt every 100 ms therefore after 10 seconds at rest/end the session
       vehicleAtRestCounter = 0
       vehicleNotAtRestCounter = 0
 
-      //  1. calculate fastest lap
-      //  2. calculate length of the whole session
-      //  3. calculate miles raced/driven [optional] TODO!!
       let sessionDelta = gpsCurrentReading.time - sessionStartTime
       sessionLength = sessionDelta
 
@@ -391,9 +323,6 @@ const main = () => {
       }
 
       saveSessionSummary(sessionLogSummary, sessionId)
-      // cloud.publish("trackdata-sessionsummary", JSON.stringify(sessionLogSummary)) // ->> this is now handled
-      //by cloud.uploadAllSessionTelemetry
-
       sessionPending = false
       sessionId = null
       lapId = null
@@ -402,7 +331,6 @@ const main = () => {
       stopWatch.stopTime()
       stopWatch.clearTicker()
       gyro.stop()
-      //obd.stop()
 
       gps_stopwatch = 0
       gps_lapNumber = 1
@@ -419,11 +347,7 @@ const main = () => {
 
       // upload data to cloud
       try {
-        //cloud.startUploadTimer(directoryRamFSPath, 25000)
         cloud.uploadAllSessionTelemetry("telemetry-lapdata", directoryRamFSPath, config.max_upload_laptime_length)
-
-        // upload OLD data that has not been uploaded for some reason
-
       } catch(e) { console.log(e) }
     }
     // ** SESSION ENDS
@@ -453,7 +377,6 @@ const main = () => {
       gps.increaseHZ() //increase gps sensitivty to 100ms prompts.
       gyro.start(100) // 100ms gyro, it can do up to 33.3khz
       stopWatch.initTicker(25) // timer always at 100ms to match gps frequency. Anything less chokes the PI electron app.
-      //stopWatch.initTicker(10) // timer always at 100ms to match gps frequency. Anything less chokes the PI electron app.
       stopWatch.startTime() // timer always at 100ms to match gps frequency. Anything less chokes the PI electron app.
     }
 
@@ -467,12 +390,6 @@ const main = () => {
 			  if (config.first_lap_ignore && gps_lapNumber == 1) { // FIRST LAP
           let lapTime = gps_stopwatchHumanReadable.minutes + ":" + gps_stopwatchHumanReadable.seconds + ":" + gps_stopwatchHumanReadable.miliseconds
           payload.l = lapTime
-
-          //let publishableCloudLap = { "trackerId": MY_ID, "sessionId": sessionId, "lapId": lapId, "lapnumber": gps_lapNumber, "laptime": lapTime, "racetrackId": gps_racetrackId, "gps_time": gps_time }
-          //cloud.publishAndForget("LiveLaptimes", publishableCloudLap)
-
-          // this was always pushing lap 1, even if ignored. We would end up with half-laps with fake times.
-          //cloud.publishAndForget("LiveLaptimes", `{"trackerId": "${MY_ID}", "racetrackId": "${gps_racetrackId}", "lapId": "${lapId}", "lapnumber": ${gps_lapNumber} ,"laptime": "${lapTime}", "gps_time": "${gps_time.toISOString()}", "sessionId": "${sessionId}" }`)
 
 					saveLapToDisk(lapId, gps_lapNumber, null, sessionId, true)
 					//slice the the driveLog because we fragment to file/save to disk every lap.
@@ -490,20 +407,14 @@ const main = () => {
 					if (gps_lapNumber == 2) gps_drawing_need_to_draw = false // after x laps stops drawing.
 
           let lapTime = gps_stopwatchHumanReadable.minutes + ":" + gps_stopwatchHumanReadable.seconds + ":" + gps_stopwatchHumanReadable.miliseconds
-          //driveLogLapTimes.push({"lap_id": lapId, "lap_number": gps_lapNumber, "lap_time": lapTime, "gps_time": gps_time, file_name: `${sessionId}-lap${gps_lapNumber}-${lapId}.dat`, uploaded_to_s3: false })
+  
           driveLogLapTimes.push({"lap_id": lapId, "lap_number": gps_lapNumber, "lap_time": lapTime, "gps_lapStartTimestamp": gps_lapStartTimestamp, "gps_time": gps_time, file_name: `${sessionId}-lap${gps_lapNumber}-${lapId}.dat`, uploaded_to_s3: false })
           payload.l = lapTime
 
           let publishableLapsArr = math.sortLaptimesByTime(driveLogLapTimes)
-          //.slice(-5)
 
           let publishableBestLapTime = publishableLapsArr[0] || 0;
           let publishableLapTime = {"lap_number": gps_lapNumber, "lap_time": lapTime}
-
-          //let publishableCloudLap = { "trackerId": MY_ID, "sessionId": sessionId, "lapId": lapId, "lapnumber": gps_lapNumber, "laptime": lapTime, "racetrackId": gps_racetrackId, "gps_time": gps_time }
-          //cloud.publishAndForget("LiveLaptimes", publishableCloudLap)
-
-          //cloud.publishAndForget("LiveLaptimes", `{"trackerId": "${MY_ID}", "racetrackId": "${gps_racetrackId}", "lapId": "${lapId}", "lapnumber": ${gps_lapNumber} ,"laptime": "${lapTime}", "gps_time": "${gps_time.toISOString()}", "sessionId": "${sessionId}" }`)
 
           cloud.publishAndForget("LiveLaptimes", `{"trackerId": "${MY_ID}", "racetrackId": "${gps_racetrackId}", "lapId": "${lapId}", "lapnumber": ${gps_lapNumber} ,"laptime": "${lapTime}", "gps_lapStartTimestamp": "${gps_lapStartTimestamp.toISOString()}", "gps_time": "${gps_time.toISOString()}", "sessionId": "${sessionId}" }`)
 					saveLapToDisk(lapId, gps_lapNumber, lapTime, sessionId, false)
@@ -512,7 +423,7 @@ const main = () => {
           stopWatch.stopTime()
           stopWatch.startTime()
           gps_lapStartTimestamp = ""
-          // saveLapTimes(driveLogLapTimes, sessionId)
+        
           socket.publish(publishableLapsArr, "userLapTimes")
           socket.publish(publishableBestLapTime, "userBestLapTime")
           socket.publish(publishableLapTime, "userPreviousLapTime")
@@ -548,11 +459,9 @@ process.on('SIGINT', function(){
 
   sys.moveCacheToSD(directoryRamFSPath,directoryDataPath).then(() => {
 	  gps.stop()
-    //obd.stop()
     process.exit()
   }).catch((e) => {
     console.log(e)
-    //process.exit()
   })
 })
 

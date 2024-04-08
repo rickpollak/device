@@ -27,7 +27,6 @@ class OBD {
       if (d.name == 'throttlepos') data.throttlepos = d.value
 
       t.emit('event', data)
-      //console.log(d)
       //if (d.name == 'temp') data.temp = d.value // this could be slower polling, no need ms updates
     })
 

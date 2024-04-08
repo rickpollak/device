@@ -44,14 +44,11 @@ class StopWatch {
   }
 
   #main = () => {
-    //let delta = sw.read()
     this.t.emit('event', this.#convertMS(sw.read(1)))
   }
 
   startTime = () => {
     sw.start()
-
-    //setInterval(this.#main, interval)
   }
 
   initTicker = (interval) => {
