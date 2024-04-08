@@ -1,49 +1,46 @@
-"use strict"
+"use strict";
 
 class LaptimeMath {
-  constructor() {
-  }
+  constructor() {}
 
-  #sortByProperty = (property) =>{
-    return function(a,b) {
-      if(a[property] > b[property])
-        return 1;
-      else if(a[property] < b[property])
-        return -1;
+  #sortByProperty = (property) => {
+    return function (a, b) {
+      if (a[property] > b[property]) return 1;
+      else if (a[property] < b[property]) return -1;
       return 0;
-    }
-  }
+    };
+  };
 
   convertSingleLaptimeToMs = (lap) => {
-    let splittedStr = lap.split(":")
-    let splittedStrFraction = lap.split(".")
+    let splittedStr = lap.split(":");
+    let splittedStrFraction = lap.split(".");
 
-    let minutes = Math.floor(Number(splittedStr[0]) * 60000)
-    let seconds = Math.floor(Number(splittedStr[1]) * 1000)
-    let millisecondsFraction = Math.floor(Number(splittedStrFraction[1]))
-    let milliseconds = Math.floor(Number(splittedStr[2]))
+    let minutes = Math.floor(Number(splittedStr[0]) * 60000);
+    let seconds = Math.floor(Number(splittedStr[1]) * 1000);
+    let millisecondsFraction = Math.floor(Number(splittedStrFraction[1]));
+    let milliseconds = Math.floor(Number(splittedStr[2]));
 
-    let sum = minutes + seconds + milliseconds + `.${millisecondsFraction}`
+    let sum = minutes + seconds + milliseconds + `.${millisecondsFraction}`;
 
-    return sum
-	}
+    return sum;
+  };
 
- 	#convertLaptimeToMs = (laptimes) => {
-		for (let lap of laptimes) {
-		 	let splittedStr = lap.lap_time.split(":")
-      let splittedStrFraction = lap.lap_time.split(".")
+  #convertLaptimeToMs = (laptimes) => {
+    for (let lap of laptimes) {
+      let splittedStr = lap.lap_time.split(":");
+      let splittedStrFraction = lap.lap_time.split(".");
 
-		 	let minutes = Math.floor(Number(splittedStr[0]) * 60000)
-		 	let seconds = Math.floor(Number(splittedStr[1]) * 1000)
-      let millisecondsFraction = Math.floor(Number(splittedStrFraction[1]))
-		 	let milliseconds = Math.floor(Number(splittedStr[2]))
+      let minutes = Math.floor(Number(splittedStr[0]) * 60000);
+      let seconds = Math.floor(Number(splittedStr[1]) * 1000);
+      let millisecondsFraction = Math.floor(Number(splittedStrFraction[1]));
+      let milliseconds = Math.floor(Number(splittedStr[2]));
 
-		 	let sum = minutes + seconds + milliseconds + `.${millisecondsFraction}`
+      let sum = minutes + seconds + milliseconds + `.${millisecondsFraction}`;
 
-		 	lap.laptimeInMs = sum
-	 	}
-	 	return laptimes
-	}
+      lap.laptimeInMs = sum;
+    }
+    return laptimes;
+  };
 
   #convertToHumanReadable = (milliseconds) => {
     if (milliseconds) {
@@ -57,37 +54,36 @@ class LaptimeMath {
       day = Math.floor(hour / 24);
       hour = hour % 24;
       return {
-          days: day,
-          hours: hour,
-          minutes: minute,
-          seconds: seconds,
-          miliseconds: ms
+        days: day,
+        hours: hour,
+        minutes: minute,
+        seconds: seconds,
+        miliseconds: ms,
       };
     }
-  }
+  };
 
   #convertMS = (milliseconds) => {
-    let time = (milliseconds/1000).toFixed(3)
-    let timeHuman = this.#convertToHumanReadable(milliseconds)
+    let time = (milliseconds / 1000).toFixed(3);
+    let timeHuman = this.#convertToHumanReadable(milliseconds);
     return {
       time: time,
-      timeHuman: timeHuman
+      timeHuman: timeHuman,
     };
-  }
+  };
 
-	sortLaptimesByTime = (laptimes) => {
-		let laptimesInMs = this.#convertLaptimeToMs(laptimes)
-    let sortedLaptimes = laptimes.sort((a, b) => a.laptimeInMs - b.laptimeInMs)
+  sortLaptimesByTime = (laptimes) => {
+    let laptimesInMs = this.#convertLaptimeToMs(laptimes);
+    let sortedLaptimes = laptimes.sort((a, b) => a.laptimeInMs - b.laptimeInMs);
 
-    return sortedLaptimes
- 	}
+    return sortedLaptimes;
+  };
 
-	sortLaptimesByLapNumber = (laptimes) => {
-		let sortedLaptimes = laptimes.sort((a,b) =>  a.lapnumber - b.lapnumber)
+  sortLaptimesByLapNumber = (laptimes) => {
+    let sortedLaptimes = laptimes.sort((a, b) => a.lapnumber - b.lapnumber);
 
-		return sortedLaptimes
- 	}
-
+    return sortedLaptimes;
+  };
 }
 
-module.exports = LaptimeMath
+module.exports = LaptimeMath;
