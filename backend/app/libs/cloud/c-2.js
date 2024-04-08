@@ -23,7 +23,7 @@ class Cloud {
       certPath: `${process.env.CPATH}/certificate.pem.crt`,
       caPath: `${process.env.CPATH}/ca.crt`,
       clientId: t_id,
-      host: "av4i3hb6jgt89-ats.iot.us-east-1.amazonaws.com",
+      host: "av4i3hb6jgt89-ats.iot.us-east-1.amazonaws.com", // racetrackhero.com mqtt endpoint.
       keepalive: 5,
     });
 
