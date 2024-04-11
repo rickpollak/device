@@ -1,5 +1,5 @@
 ### Racetrack Hero
-
+1
 # Overview
 
 Racetrack Hero is a software solution designed to transform your Raspberry Pi into a powerful data acquisition and analysis tool for motorsports enthusiasts. Whether you're a professional racer, amateur driver, or simply passionate about cars and racing, Racetrack Hero provides the tools you need to analyze and improve your performance on the track.
