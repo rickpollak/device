@@ -21,7 +21,7 @@ This software is licensed under the [GNU General Public License v3.0 (GPL-3.0)](
 
 # No Liability
 
-The Racetrack Hero software and hardware component come as is, without any warranty or condition, and the licensor will not be liable to you for any damages arising out of these terms or the use or nature of the Racetrack Hero software or hardware component, under any kind of legal claim. This includes, but is not limited to, any accidents, injuries, deaths, or damage to property, including vehicles, that may occur as a result of using the Racetrack Hero software or hardware component for building a telemetry device with a lap timer or any related purposes.
+The Racetrack Hero software and hardware component come as is, without any warranty or condition, and the licensor will not be liable to you for any damages arising out of these terms or the use or nature of the Racetrack Hero software or hardware component under any legal claim. This includes but is not limited to, any accidents, injuries, deaths, or damage to property, including vehicles, that may occur due to using the Racetrack Hero software or hardware component for building a telemetry device with a lap timer or any related purposes.
 
 # Getting Started
 
@@ -39,7 +39,7 @@ To get started with Racetrack Hero on Raspberry Pi 4 and 0 W with GPS hat ensure
 6. [Suction Cup](https://www.amazon.com/dp/B07YJJSCLX?psc=1&ref=product_details)
 
 ### Assembly
-1. Install the Berry GPS hat onto the Raspberry Pi0. Soldering is required for getting the hat attached to it.
+1. Install the Berry GPS hat onto the Raspberry Pi0. Soldering is required to get the hat attached to it.
 <img width="620" height="480" src="https://private-user-images.githubusercontent.com/7461901/318236432-01eb32f4-33a6-49e3-b488-f37f1a2767d8.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTE4NTA1NTIsIm5iZiI6MTcxMTg1MDI1MiwicGF0aCI6Ii83NDYxOTAxLzMxODIzNjQzMi0wMWViMzJmNC0zM2E2LTQ5ZTMtYjQ4OC1mMzdmMWEyNzY3ZDguanBnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI0MDMzMSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNDAzMzFUMDE1NzMyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9NGJkMjk3Y2RjZGM0MzhlYWJlZTBjOTM0OGY1NGYyMmY2OTU4MGM2OTMxZTRhZjBkNjQ2MGY1MzE3ZjE1NzM2YiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.rZ8Qiw_SXPVyTYqoBQk58WiRVbMDipHi1ro5kqEIGSk"/>
 
 2. Obtain the GPS floor either by ordering it from the Racetrack Hero store, or by printing it yourself from the following CAD file.
@@ -56,7 +56,7 @@ To get started with Racetrack Hero on Raspberry Pi 4 and 0 W with GPS hat ensure
 
 ### Hardware Components
 1. Raspberry Pi 4
-2. [Berry GPS-IMU V4](https://ozzmaker.com/product/berrygps-imu). You can also obtain different GPS hats which might be already compatible with this software (look at GPS hat drivers in "./libs/gps" directory).
+2. [Berry GPS-IMU V4](https://ozzmaker.com/product/berrygps-imu). You can also obtain different GPS hats that might be already compatible with this software (look at GPS hat drivers in "./libs/gps" directory).
 3. External GPS Antenna - GPS/GNSS Magnetic Mount Antenna - 3m (SMA)
 4. SMA GPS Connector. 
 5. ZTE MF833V 4G LTE USB Modem Dongle for data.
